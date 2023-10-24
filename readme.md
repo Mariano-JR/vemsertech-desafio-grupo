@@ -1,8 +1,3 @@
----
-marp: true
----
-
-
 # Lógica de Programação - Projeto final
 
 Desenvolver, utilizando os conceitos abordados ao longo do módulo, uma aplicação de lista de tarefas (ToDo List).
