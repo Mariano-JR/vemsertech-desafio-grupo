@@ -1,92 +1,88 @@
-const taskService = require('./task-service')
-
+const taskService = require('./task-repository')
 var readlineSync = require('readline-sync')
 
-const index = () => {
+function index() {
     const tasks = taskService.list()
-    displayList(tasks)
-}
-
-const show = () => {
-    const id = +readlineSync.question('\n🔍 Digite o ID da tarefa: ')
-    const task = taskService.findById(id)
-    task === undefined
-        ? console.log('\n⛔ Erro: Tarefa não encontrada ⛔\n')
-        : console.log(task)
-}
-
-const store = () => {
-    const description = readlineSync.question('\n📝 Por Favor, digite a descrição da tarefa: ')
-    const deadline = readlineSync.question('\n📆 Por Favor, digite o prazo da tarefa: ')
-    taskService.save({ description, deadline })
-    console.log('\n✅ Tarefa criada com sucesso ✅')
-    index()
-}
-
-const update = () => {
-    let description
-    let deadline
-
-    const id = +readlineSync.question('\n🌐 Escolha a tarefa para editar: ')
-    const task = taskService.findById(id)
-    if (task === undefined) {
-        console.log('\n⛔ Erro: Tarefa não encontrada ⛔')
-        return false
-    }
-
-    const editOption = +readlineSync.question('\nQual opção gostaria de editar:\n\n1 - 📝 Descrição\n2 - 📆 Data Limite\n3 - ✌🏼 Editar os dois\n\n')
-    switch (editOption) {
-        case 1:
-            description = readlineSync.question('\n📝 Digite a nova descrição da tarefa: ')
-            taskService.edit({ editOption, id, description, undefined })
-            break
-        case 2:
-            deadline = readlineSync.question('\n📆 Digite a nova data limite da tarefa: ')
-            taskService.edit({ editOption, id, undefined, deadline })
-            break
-        case 3:
-            description = readlineSync.question('\n📝 Digite a nova descrição da tarefa: ')
-            deadline = readlineSync.question('\n📆 Digite a nova data limite da tarefa: ')
-            taskService.edit({ editOption, id, description, deadline })
-            break
-        default:
-            console.log('\n⛔ Erro: Opção invalida ⛔\n')
-            break
-    }
-    index()
-}
-
-const destroy = () => {
-    const id = +readlineSync.question('\n❌ Digite o ID que você deseja remover: ')
-    const task = taskService.findById(id)
-    if (task === undefined) {
-        console.log('\n⛔ Erro: Tarefa não encontrada ⛔\n')
-        return false
-    }
-    taskService.remove(id)
-    console.log('\n❌ Tarefa removida com sucesso ❌\n')
-    index()
-}
-
-const displayList = (tasks) => {
     console.log('\n--------------------\n| Lista de tarefas |\n--------------------\n')
     console.log(tasks)
 }
 
-const main = () => {
+function show() {
+    const id = +readlineSync.question('\nDigite o ID da tarefa: ')
+    const task = taskService.findById(id)
+    task === undefined
+        ? console.log('\nErro: Tarefa nao encontrada\n')
+        : console.log(task)
+}
+
+function store() {
+    const description = readlineSync.question('\nPor Favor, digite a descricao da tarefa: ')
+    const deadline = readlineSync.question('\nPor Favor, digite o prazo da tarefa: ')
+    taskService.save({ description, deadline })
+    console.log('\nTarefa criada com sucesso')
+    index()
+}
+
+function update() {
+    let description
+    let deadline
+
+    const id = +readlineSync.question('\nEscolha a tarefa para editar: ')
+    const task = taskService.findById(id)
+    if (task === undefined) {
+        console.log('\nErro: Tarefa nao encontrada')
+        return false
+    }
+
+    const editOption = +readlineSync.question('\nQual opcao gostaria de editar:\n\n1 - Descricao\n2 - Data Limite\n3 - Editar os dois\n\n')
+    switch (editOption) {
+        case 1:
+            description = readlineSync.question('\nDigite a nova descricao da tarefa: ')
+            taskService.edit({ editOption, id, description, undefined })
+            break
+        case 2:
+            deadline = readlineSync.question('\nDigite a nova data limite da tarefa: ')
+            taskService.edit({ editOption, id, undefined, deadline })
+            break
+        case 3:
+            description = readlineSync.question('\nDigite a nova descricao da tarefa: ')
+            deadline = readlineSync.question('\nDigite a nova data limite da tarefa: ')
+            taskService.edit({ editOption, id, description, deadline })
+            break
+        default:
+            console.log('\nErro: Opcao invalida\n')
+            break
+    }
+    index()
+}
+
+function destroy() {
+    const id = +readlineSync.question('\nDigite o ID da tarefa que voce deseja remover: ')
+    const task = taskService.findById(id)
+    if (task === undefined) {
+        console.log('\nErro: Tarefa nao encontrada\n')
+        return false
+    }
+    taskService.remove(id)
+    console.log('\nTarefa removida com sucesso\n')
+    index()
+}
+
+function main() {
     let welcome = true
     let message
     let option
 
     do {
         if (welcome) {
-            message = '\n-----------------------------------\n| Bem Vindo a sua lista de tarefas |\n-----------------------------------\n'
             welcome = false
+            message = '\n------------------------------------\n| Bem Vindo a sua lista de tarefas |\n------------------------------------\n\nPara prosseguir, escolha uma das opcoes abaixo:\n'
         } else {
-            message = '\n---------------------------------------\n| Escola outra opção para continuar |\n---------------------------------------\n'
+            message = '\nEscola outra opcao para continuar:\n'
         }
+
         option = +readlineSync.question(
-            message + 'Para prosseguir, escolha uma das opções abaixo:\n\n1 - 📃 Listar todas as tarefas\n2 - 🔍 Obter tarefa através do ID\n3 - ✍🏼 Adicionar Tarefa\n4 - 🌐 Editar Tarefa\n5 - ❌ Remover Tarefa\n0 - 👋🏼 Sair do sistema\n\n'
+            message + '\n1 - Listar todas as tarefas\n2 - Obter tarefa atraves do ID\n3 - Adicionar Tarefa\n4 - Editar Tarefa\n5 - Remover Tarefa\n0 - Sair do sistema\n\n'
         )
 
         switch (option) {
@@ -106,10 +102,10 @@ const main = () => {
                 destroy()
                 break
             case 0:
-                console.log('\nSaindo do sistema 👋🏼\n')
+                console.log('\nSaindo do sistema\n')
                 break
             default:
-                console.log('\n⛔ Opção invalida ⛔\n')
+                console.log('\nOpcao invalida\n')
         }
     } while (option != 0)
 }
