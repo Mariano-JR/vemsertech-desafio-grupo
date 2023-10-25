@@ -1,15 +1,15 @@
 const tasksDb = require('./tasks-db')
 
-const list = () => {
+function list() {
 	return tasksDb
 }
 
-const findById = (id) => {
+function findById(id) {
 	const task = tasksDb.find((task) => task.id == id)
 	return task
 }
 
-const save = ({ description, deadline }) => {
+function save({ description, deadline }) {
 	const lastId = tasksDb.length > 0 ? tasksDb[tasksDb.length - 1].id : 0
 	const task = {
 		id: lastId + 1,
@@ -20,7 +20,7 @@ const save = ({ description, deadline }) => {
 	return tasksDb
 }
 
-const edit = ({ editOption, id, description, deadline }) => {
+function edit({ editOption, id, description, deadline }) {
 	const task = tasksDb.find((task) => task.id == id)
 
 	if (editOption === 1) {
@@ -34,11 +34,9 @@ const edit = ({ editOption, id, description, deadline }) => {
 	return tasksDb
 }
 
-const remove = (id) => {
+function remove(id) {
 	const index = tasksDb.findIndex((task) => task.id === id)
-	if (index !== -1) {
-		tasksDb.splice(index, 1)
-	}
+	tasksDb.splice(index, 1)
 }
 
 module.exports = {
