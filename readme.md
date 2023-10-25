@@ -23,7 +23,7 @@ Não haverá a persistência das tarefas em banco de dados. Para isso, podem uti
 Entre no diretório do projeto
 
 ```bash
-  cd projeto-grupo-6
+  cd vemsertech-desafio-grupo
 ```
 
 Instale as dependências
