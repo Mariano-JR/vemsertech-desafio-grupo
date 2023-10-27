@@ -1,15 +1,15 @@
-const taskService = require('./task-repository')
+const taskRepository = require('./task-repository')
 var readlineSync = require('readline-sync')
 
 function index() {
-    const tasks = taskService.list()
+    const tasks = taskRepository.list()
     console.log('\n--------------------\n| Lista de tarefas |\n--------------------\n')
     console.log(tasks)
 }
 
 function show() {
     const id = +readlineSync.question('\nDigite o ID da tarefa: ')
-    const task = taskService.findById(id)
+    const task = taskRepository.findById(id)
     task === undefined
         ? console.log('\nErro: Tarefa nao encontrada\n')
         : console.log(task)
@@ -18,7 +18,7 @@ function show() {
 function store() {
     const description = readlineSync.question('\nPor Favor, digite a descricao da tarefa: ')
     const deadline = readlineSync.question('\nPor Favor, digite o prazo da tarefa: ')
-    taskService.save({ description, deadline })
+    taskRepository.save({ description, deadline })
     console.log('\nTarefa criada com sucesso')
     index()
 }
@@ -28,7 +28,7 @@ function update() {
     let deadline
 
     const id = +readlineSync.question('\nEscolha a tarefa para editar: ')
-    const task = taskService.findById(id)
+    const task = taskRepository.findById(id)
     if (task === undefined) {
         console.log('\nErro: Tarefa nao encontrada')
         return false
@@ -38,16 +38,16 @@ function update() {
     switch (editOption) {
         case 1:
             description = readlineSync.question('\nDigite a nova descricao da tarefa: ')
-            taskService.edit({ editOption, id, description, undefined })
+            taskRepository.edit({ editOption, id, description, undefined })
             break
         case 2:
             deadline = readlineSync.question('\nDigite a nova data limite da tarefa: ')
-            taskService.edit({ editOption, id, undefined, deadline })
+            taskRepository.edit({ editOption, id, undefined, deadline })
             break
         case 3:
             description = readlineSync.question('\nDigite a nova descricao da tarefa: ')
             deadline = readlineSync.question('\nDigite a nova data limite da tarefa: ')
-            taskService.edit({ editOption, id, description, deadline })
+            taskRepository.edit({ editOption, id, description, deadline })
             break
         default:
             console.log('\nErro: Opcao invalida\n')
@@ -58,12 +58,12 @@ function update() {
 
 function destroy() {
     const id = +readlineSync.question('\nDigite o ID da tarefa que voce deseja remover: ')
-    const task = taskService.findById(id)
+    const task = taskRepository.findById(id)
     if (task === undefined) {
         console.log('\nErro: Tarefa nao encontrada\n')
         return false
     }
-    taskService.remove(id)
+    taskRepository.remove(id)
     console.log('\nTarefa removida com sucesso\n')
     index()
 }
